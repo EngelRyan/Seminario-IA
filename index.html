@@ -9,8 +9,51 @@
 <body>
   <main class="app-container">
     <h1>Validador de Aposentadoria (RGPS)</h1>
-    <p>Estrutura inicial do projeto. A interface e a lógica serão implementadas nas próximas tarefas.</p>
+
+    <form id="form-aposentadoria" class="form-card" novalidate>
+      <div class="form-group">
+        <label for="sexo">Sexo:</label>
+        <select id="sexo" name="sexo" required>
+          <option value="" selected disabled>Selecione</option>
+          <option value="Feminino">Feminino</option>
+          <option value="Masculino">Masculino</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="idade">Idade:</label>
+        <input
+          type="number"
+          id="idade"
+          name="idade"
+          min="0"
+          max="200"
+          step="1"
+          placeholder="Informe a idade"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="tempoContribuicao">Tempo de Contribuição (anos):</label>
+        <input
+          type="number"
+          id="tempoContribuicao"
+          name="tempoContribuicao"
+          min="0"
+          max="100"
+          step="1"
+          placeholder="Informe o tempo em anos"
+          required
+        />
+      </div>
+
+      <button type="button" id="btn-validar" class="btn-primary">Validar</button>
+    </form>
+
+    <section id="mensagens" class="mensagens" aria-live="polite"></section>
   </main>
+
   <script src="scripts/app.js"></script>
 </body>
 </html>
