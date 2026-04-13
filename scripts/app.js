@@ -1,7 +1,6 @@
 // Validador de Aposentadoria (RGPS)
-// Este arquivo implementa APENAS a validação de ENTRADA dos dados
-// (issue #3). As regras de negócio de aposentadoria serão tratadas
-// em issues seguintes.
+// Issue #3: validação de ENTRADA dos dados (já implementada).
+// Issue #4: regras de NEGÓCIO de aposentadoria (implementadas abaixo).
 
 const LIMITE_IDADE_MAX = 200;
 const LIMITE_TEMPO_MAX = 100;
@@ -46,6 +45,8 @@ function exibirMensagem(texto, tipo) {
     mensagens.classList.add("mensagem-sucesso");
   }
 }
+
+// -------- Validação de entradas (issue #3) --------
 
 function validarEntradas() {
   const { sexo, idadeValor, tempoValor } = obterValoresFormulario();
@@ -119,10 +120,6 @@ function validarEntradas() {
     return null;
   }
 
-  // Se chegou aqui, os dados de entrada são válidos.
-  // NÃO aplicamos ainda as regras de negócio de aposentadoria.
-  exibirMensagem("Dados de entrada válidos. (Próxima etapa: validar aposentadoria)", "sucesso");
-
   return {
     sexo,
     idade: resultadoIdade.numero,
@@ -130,8 +127,98 @@ function validarEntradas() {
   };
 }
 
+// -------- Regras de negócio de aposentadoria (issue #4) --------
+
+function validarAposentadoria(sexo, idade, tempoContribuicao) {
+  let idadeMinima;
+  let tempoMinimo;
+
+  if (sexo === "Feminino") {
+    idadeMinima = 62;
+    tempoMinimo = 15;
+  } else if (sexo === "Masculino") {
+    idadeMinima = 65;
+    tempoMinimo = 20;
+  } else {
+    return {
+      aprovada: false,
+      motivo: "sexoInvalido",
+    };
+  }
+
+  if (idade >= idadeMinima && tempoContribuicao >= tempoMinimo) {
+    return {
+      aprovada: true,
+    };
+  }
+
+  if (idade < idadeMinima) {
+    return {
+      aprovada: false,
+      motivo: "idade",
+      idadeMinima,
+    };
+  }
+
+  if (tempoContribuicao < tempoMinimo) {
+    return {
+      aprovada: false,
+      motivo: "tempo",
+      tempoMinimo,
+    };
+  }
+
+  return {
+    aprovada: false,
+    motivo: "desconhecido",
+  };
+}
+
+function processarResultadoAposentadoria(resultado) {
+  if (resultado.aprovada) {
+    exibirMensagem("Aposentadoria aprovada.", "sucesso");
+    return;
+  }
+
+  if (resultado.motivo === "idade") {
+    exibirMensagem(
+      `Aposentadoria negada. Requisito não atendido: idade mínima (${resultado.idadeMinima} anos).`,
+      "erro"
+    );
+    return;
+  }
+
+  if (resultado.motivo === "tempo") {
+    exibirMensagem(
+      `Aposentadoria negada. Requisito não atendido: tempo de contribuição mínimo (${resultado.tempoMinimo} anos).`,
+      "erro"
+    );
+    return;
+  }
+
+  if (resultado.motivo === "sexoInvalido") {
+    exibirMensagem("Sexo inválido para validação de aposentadoria.", "erro");
+    return;
+  }
+
+  exibirMensagem("Não foi possível determinar o resultado da aposentadoria.", "erro");
+}
+
+// -------- Fluxo principal do botão Validar --------
+
 function handleValidarClick() {
-  validarEntradas();
+  const dadosValidos = validarEntradas();
+  if (!dadosValidos) {
+    return; // Mensagem de erro já exibida em validarEntradas
+  }
+
+  const resultado = validarAposentadoria(
+    dadosValidos.sexo,
+    dadosValidos.idade,
+    dadosValidos.tempoContribuicao
+  );
+
+  processarResultadoAposentadoria(resultado);
 }
 
 function registrarEventos() {
@@ -143,4 +230,6 @@ function registrarEventos() {
 
 window.addEventListener("DOMContentLoaded", registrarEventos);
 
-console.log("Validador de Aposentadoria (RGPS) - validação de entradas carregada");
+console.log(
+  "Validador de Aposentadoria (RGPS) - validação de entradas e regras de negócio carregadas"
+);
