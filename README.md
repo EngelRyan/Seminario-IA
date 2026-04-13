@@ -34,3 +34,20 @@ Os testes cobrem:
 
 - Os 4 cenários de exemplo do caso de uso.
 - Casos de borda com valores exatamente nas idades e tempos mínimos para homens e mulheres.
+
+## Publicação via GitHub Pages
+
+Foi criada a branch `gh-pages` a partir da branch `main`, contendo a mesma versão da aplicação.
+
+Para publicar pelo GitHub Pages:
+
+1. No GitHub, acesse **Settings > Pages** do repositório.
+2. Em **Build and deployment**, selecione:
+   - **Source**: `Deploy from a branch`.
+   - **Branch**: `gh-pages` e pasta raiz (`/`).
+3. Salve as configurações.
+4. Após alguns minutos, a aplicação ficará disponível em:
+
+   `https://engelryan.github.io/Seminario-IA/`
+
+O link acima também pode ser adicionado à descrição do repositório após a publicação estar ativa.
