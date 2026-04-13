@@ -84,10 +84,12 @@ body {
 
 .mensagem-erro {
   color: #b00020;
+  font-weight: 600;
 }
 
 .mensagem-sucesso {
   color: #0a7b34;
+  font-weight: 600;
 }
 
 @media (max-width: 520px) {
